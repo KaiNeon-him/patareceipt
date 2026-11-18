@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./patareceipt-app/backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=patareceipt
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - JWT_SECRET=patareceipt-secret-change-in-production
+      - CORS_ORIGIN=*
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=patareceipt
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
